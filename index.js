@@ -12,7 +12,8 @@ app.use(cors())
  const pool = new Pool(); 
 
  app.get("/", (req, res) => {
- res.send("hello you")
+ res.send(`<h1>This is The Eating Soon API</h1>
+ <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlL_FSvimnEplBNIl-ee2PWSu6M_btneLm0HHUkSRBLQ&s"/>`)
  })
 
  app.get("/api/recipes", (req, res) => { 
@@ -34,17 +35,26 @@ const {categ} = req.params;
     .then((data) => res.json(data.rows))
     .catch((e) => {
         console.log(e); 
-        res.sendStatus(500); 
+        res.sendStatus(418); 
     });
 });
 
+app.get("/api/recipe/:id", (req, res) => {
+    const {id} = req.params; 
+    pool 
+    .query("SELECT * FROM recipes WHERE id=$1", [id])
+    .then((data) => res.json(data.rows))
+    .catch((e) => {
+        console.log(e); 
+        res.sendStatus(500); 
+    });
+})
+ 
 
 
-
-/* //repaire
 app.all("*", (req, res) => {
     res.redirect("/")
-}) */
+}) 
 
  app.listen(PORT, () => {
     console.log(`listening on http://localhost:${PORT}`)
